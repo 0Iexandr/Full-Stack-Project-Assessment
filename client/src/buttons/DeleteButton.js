@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
+import './DeleteButton.css';
 
-function DeleteButton() {
+function DeleteButton({deleteVideo}) {
   return (
-    <button class="p-2 mb-1 bg-danger text-white delete-button">Delete</button>
+    <button className='delete-button' type='button' onClick={deleteVideo}>Delete</button>
   );
 }
 
