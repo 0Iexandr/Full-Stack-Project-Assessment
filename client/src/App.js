@@ -8,14 +8,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [videos, setVideos] = useState(dataVideos);
-
-  const generateVideoRating = () => {
-    const rating = Math.round(Math.random() * 2000);
-    return rating;
-  };
+  const sortedVideos = videos.sort((a, b) => b.rating - a.rating);
 
   const addVideo = (videoData) => {
-    const newVideo = { ...videoData, id: uuidv4(), rating: generateVideoRating() };
+    const rating = Math.round(Math.random() * 3000);
+    const newDate = new Date();
+    const date = newDate.toLocaleDateString('fr-CA');
+    const time = newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds();
+    const newVideo = { ...videoData, id: uuidv4(), rating: rating, date: date, time: time };
     setVideos(prevState => [...prevState, newVideo]);
   };
 
@@ -31,9 +31,9 @@ function App() {
       <main className='App-main'>
         <AddVideoButton addVideo={addVideo} />
         <section className='videos'>
-          {videos.map((video, key) => (
-            <Video video={video} key={key} deleteVideo={deleteVideo} />
-          ))}
+          {sortedVideos.map((video) => (
+            <Video video={video} key={video.id} deleteVideo={deleteVideo} />
+          ))} 
         </section>
       </main>
     </div>
