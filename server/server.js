@@ -38,6 +38,7 @@ app.post('/', (req, res) => {
     time: time
   });
   videos.push(video);
+  res.status(200).send(video);
 });
 
 app.get('/:id', (req, res) => {

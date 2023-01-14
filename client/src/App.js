@@ -1,26 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import './App.css';
 import Video from './Video/Video';
-import dataVideos from './data/exampleresponse.json';
 import AddVideoButton from './buttons/AddVideoButton';
-import { v4 as uuidv4 } from 'uuid';
 
 function App() {
-  const [videos, setVideos] = useState(dataVideos);
+  const [videos, setVideos] = useState([]);
   const sortedVideos = videos.sort((a, b) => b.rating - a.rating);
 
+  useEffect(() => {
+    fetch('http://127.0.0.1:5000/', {
+      mode: 'cors'
+    })
+    .then(res => res.json())
+    .then(data => setVideos(data))
+  }, []);
+
   const addVideo = (videoData) => {
-    const rating = Math.round(Math.random() * 3000);
-    const newDate = new Date();
-    const date = newDate.toLocaleDateString('fr-CA');
-    const time = newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds();
-    const newVideo = { ...videoData, id: uuidv4(), rating: rating, date: date, time: time };
-    setVideos(prevState => [...prevState, newVideo]);
+    fetch('http://127.0.0.1:5000/', {
+      method: 'post',
+      mode: 'cors',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(videoData)
+    })
+    .then(res => {
+      if(res.ok) {
+        return res.json();
+      }
+    })
+    .then(data => setVideos(prevState => [...prevState, data]))
   };
 
   const deleteVideo = (id) => {
-    setVideos(prevState => prevState.filter(video => video.id !== id));
+    fetch(`http://127.0.0.1:5000/${id}`, {
+      method: 'delete',
+      mode: 'cors'
+    })
+    .then(res => {
+      if(res.ok) {
+        return res.json();
+      }
+    })
+    .then(data => setVideos(data))
   };
 
   return (
