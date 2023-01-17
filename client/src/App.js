@@ -3,10 +3,11 @@ import { useState } from 'react';
 import './App.css';
 import Video from './Video/Video';
 import AddVideoButton from './buttons/AddVideoButton';
+import OrderingSelector from './OrderingSelector/OrderingSelector';
 
 function App() {
   const [videos, setVideos] = useState([]);
-  const sortedVideos = videos.sort((a, b) => b.rating - a.rating);
+  // const sortedVideos = videos.sort((a, b) => b.rating - a.rating);
 
   useEffect(() => {
     fetch('http://127.0.0.1:5000/', {
@@ -46,6 +47,14 @@ function App() {
     .then(data => setVideos(data))
   };
 
+  const orderVideos = (method) => {
+    fetch(`http://127.0.0.1:5000/?order=${method}`, {
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(data => setVideos(data));
+  };
+
   return (
     <div className='App'>
       <header className='App-header'>
@@ -53,8 +62,9 @@ function App() {
       </header>
       <main className='App-main'>
         <AddVideoButton addVideo={addVideo} />
+        <OrderingSelector orderVideos={orderVideos} />
         <section className='videos'>
-          {sortedVideos.map((video) => (
+          {videos.map((video) => (
             <Video video={video} key={video.id} deleteVideo={deleteVideo} />
           ))} 
         </section>

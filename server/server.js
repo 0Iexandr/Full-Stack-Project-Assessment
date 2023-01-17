@@ -13,8 +13,19 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 let videos = [...initialVideos];
 
+// app.get('/', (req, res) => {
+//   res.status(200).send(videos);
+// });
+
 app.get('/', (req, res) => {
-  res.status(200).send(videos);
+  if(req.query.order === 'ascending') {
+    videos.sort((a, b) => a.rating - b.rating);
+    res.status(200).send(videos);
+  }
+  else {
+    videos.sort((a, b) => b.rating - a.rating);
+    res.status(200).send(videos);
+  }   
 });
 
 app.post('/', (req, res) => {
