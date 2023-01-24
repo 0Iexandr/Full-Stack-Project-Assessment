@@ -47,10 +47,6 @@ You can find each of the levels split into separate files, linked below.
 
 - [Level 300](./300.md)
   - Integrate the back end with a database
-- [Level 399](./399.md) (Optional)
-  - Stretch goals for the database if you have time
-- [Level 999](./999.md) (Optional)
-  - More optional goals for if you have time
 
 ## Sample Solution
 
