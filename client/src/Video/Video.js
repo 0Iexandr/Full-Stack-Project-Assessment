@@ -27,6 +27,9 @@ function Video({video, deleteVideo}) {
         </div>
         <DeleteButton deleteVideo={() => deleteVideo(video.id)}/>
       </div>
+      <div className='data-container'>
+        {(video.date && video.time) && <p>Added on {video.date}, {video.time}</p>}
+      </div>
     </div>
   );
 }

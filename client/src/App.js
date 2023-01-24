@@ -1,26 +1,57 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import './App.css';
 import Video from './Video/Video';
-import dataVideos from './data/exampleresponse.json';
 import AddVideoButton from './buttons/AddVideoButton';
-import { v4 as uuidv4 } from 'uuid';
+import OrderingSelector from './OrderingSelector/OrderingSelector';
 
 function App() {
-  const [videos, setVideos] = useState(dataVideos);
+  const [videos, setVideos] = useState([]);
 
-  const generateVideoRating = () => {
-    const rating = Math.round(Math.random() * 2000);
-    return rating;
-  };
+  useEffect(() => {
+    fetch('http://127.0.0.1:5000/', {
+      mode: 'cors'
+    })
+    .then(res => res.json())
+    .then(data => setVideos(data))
+  }, []);
 
   const addVideo = (videoData) => {
-    const newVideo = { ...videoData, id: uuidv4(), rating: generateVideoRating() };
-    setVideos(prevState => [...prevState, newVideo]);
+    fetch('http://127.0.0.1:5000/', {
+      method: 'post',
+      mode: 'cors',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(videoData)
+    })
+    .then(res => {
+      if(res.ok) {
+        return res.json();
+      }
+    })
+    .then(data => setVideos(prevState => [...prevState, data]))
   };
 
   const deleteVideo = (id) => {
-    setVideos(prevState => prevState.filter(video => video.id !== id));
+    fetch(`http://127.0.0.1:5000/${id}`, {
+      method: 'delete',
+      mode: 'cors'
+    })
+    .then(res => {
+      if(res.ok) {
+        return res.json();
+      }
+    })
+    .then(data => setVideos(prevState => prevState.filter(video => video.id !== data.id)))
+  };
+
+  const orderVideos = (method) => {
+    fetch(`http://127.0.0.1:5000/?order=${method}`, {
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(data => setVideos(data));
   };
 
   return (
@@ -29,11 +60,14 @@ function App() {
         <h1>Video Recommendation</h1>
       </header>
       <main className='App-main'>
-        <AddVideoButton addVideo={addVideo} />
+        <div className='App-control'>
+          <AddVideoButton addVideo={addVideo} />
+          <OrderingSelector orderVideos={orderVideos} />
+        </div>
         <section className='videos'>
-          {videos.map((video, key) => (
-            <Video video={video} key={key} deleteVideo={deleteVideo} />
-          ))}
+          {videos.map((video) => (
+            <Video video={video} key={video.id} deleteVideo={deleteVideo} />
+          ))} 
         </section>
       </main>
     </div>
