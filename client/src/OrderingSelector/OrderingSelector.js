@@ -1,4 +1,6 @@
-import React from "react";
+import React from 'react';
+import Form from 'react-bootstrap/Form';
+import './OrderingSelector.css';
 
 function OrderingSelector({orderVideos}) {
   const handleChange = (event) => {
@@ -6,12 +8,12 @@ function OrderingSelector({orderVideos}) {
   };
 
   return (
-    <div>
+    <div className='order'>
       <p>Sort by</p>
-      <select onChange={handleChange}>
-        <option>descending</option>
-        <option>ascending</option>
-      </select>
+      <Form.Select aria-label='Default select example' onChange={handleChange}>
+        <option value='descending'>descending</option>
+        <option value='ascending'>ascending</option>
+      </Form.Select>
     </div>
   )
 }

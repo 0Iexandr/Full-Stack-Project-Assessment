@@ -7,7 +7,6 @@ import OrderingSelector from './OrderingSelector/OrderingSelector';
 
 function App() {
   const [videos, setVideos] = useState([]);
-  // const sortedVideos = videos.sort((a, b) => b.rating - a.rating);
 
   useEffect(() => {
     fetch('http://127.0.0.1:5000/', {
@@ -44,7 +43,7 @@ function App() {
         return res.json();
       }
     })
-    .then(data => setVideos(data))
+    .then(data => setVideos(prevState => prevState.filter(video => video.id !== data.id)))
   };
 
   const orderVideos = (method) => {
@@ -61,8 +60,10 @@ function App() {
         <h1>Video Recommendation</h1>
       </header>
       <main className='App-main'>
-        <AddVideoButton addVideo={addVideo} />
-        <OrderingSelector orderVideos={orderVideos} />
+        <div className='App-control'>
+          <AddVideoButton addVideo={addVideo} />
+          <OrderingSelector orderVideos={orderVideos} />
+        </div>
         <section className='videos'>
           {videos.map((video) => (
             <Video video={video} key={video.id} deleteVideo={deleteVideo} />

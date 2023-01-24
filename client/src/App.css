@@ -19,6 +19,12 @@ header {
   align-items: center;
 }
 
+.App-control {
+  display: flex;
+  align-items: baseline;
+  column-gap: 6em;
+}
+
 .videos{
   display: flex;
   flex-flow: row wrap;

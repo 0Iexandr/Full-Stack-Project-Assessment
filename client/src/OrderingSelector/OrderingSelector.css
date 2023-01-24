@@ -1,0 +1,10 @@
+.order {
+  display: flex;
+  white-space: nowrap;
+  align-items: baseline;
+  column-gap: 1rem;
+}
+
+.order p {
+  font-size: 18px;
+}
